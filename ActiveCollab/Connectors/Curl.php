@@ -40,7 +40,7 @@
         curl_setopt($http, CURLOPT_HTTPHEADER, array('Content-type: multipart/form-data'));
 
         $counter = 1;
-        $one_file =  preg_match('/path_info=projects\\/([a-z0-9\\-\\._]+)\\/files\\/files\\/upload&/', urldecode($url));
+        $one_file =  count( $files ) == 1;
 
         foreach($files as $file) {
           if ((version_compare(PHP_VERSION, '5.5') >= 0)) {
