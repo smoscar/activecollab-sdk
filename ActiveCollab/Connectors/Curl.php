@@ -40,9 +40,16 @@
         curl_setopt($http, CURLOPT_HTTPHEADER, array('Content-type: multipart/form-data'));
 
         $counter = 1;
+        $one_file =  preg_match('/path_info=projects\\/([a-z0-9\\-\\._]+)\\/files\\/files\\/upload&/', urldecode($url));
 
         foreach($files as $file) {
-          $post_data['attachment_' . $counter++] = '@' . $file . ';type=application/octet-stream';
+          if ((version_compare(PHP_VERSION, '5.5') >= 0)) {
+            $post_data[($one_file ? 'attachment' : ('attachment_' . $counter++))] = new \CURLFile($file);
+            curl_setopt($http, CURLOPT_SAFE_UPLOAD, true);
+          } else {
+            $post_data[($one_file ? 'attachment' : ('attachment_' . $counter++))] = '@' . $file . ';type=application/octet-stream';
+	
+          }
         } // foreach
       } // if
 
